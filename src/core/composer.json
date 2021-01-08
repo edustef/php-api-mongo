@@ -1,0 +1,16 @@
+{
+    "name": "edustef/php-mvc-framework",
+    "description": "",
+    "authors": [
+        {
+            "name": "Eduard Stefan",
+            "email": "eduardstefan290@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "edustef\\mvcFrame\\": "."
+        }
+    } 
+}
