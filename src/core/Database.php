@@ -2,18 +2,22 @@
 
 namespace edustef\mvcFrame;
 
-use \PDO;
-
 class Database
 {
-  public PDO $pdo;
+  private $cliente;
 
   public function __construct(array $config)
   {
-    $dsn = $config['dsn'] ?? '';
-    $user = $config['user'] ?? '';
-    $password = $config['password'] ?? '';
-    $this->pdo = new PDO($dsn, $user, $password);
-    $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $username = $config['username'];
+    $password = $config['password'];
+    $dbname = $config['dbname'];
+
+    $this->cliente = (new \MongoDB\Client(
+      "mongodb+srv://$username:$password@cluster0.08zog.mongodb.net/$dbname?retryWrites=true&w=majority"
+    ))->{$dbname};
+  }
+  public function getDB()
+  {
+    return $this->cliente;
   }
 }

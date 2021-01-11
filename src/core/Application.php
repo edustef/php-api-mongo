@@ -14,7 +14,7 @@ class Application
   public ?Controller $controller = null;
 
   // CONFIG Variables
-  public ?Database $database = null;
+  public $database = null;
   public ?DatabaseModel $user = null;
 
   public function __construct(array $config)
@@ -27,7 +27,7 @@ class Application
     $this->router = new Router($this->request, $this->response);
 
     if (isset($config['db'])) {
-      $this->database = new Database($config['db']);
+      $this->database = (new Database($config['db']))->getDb();
     }
   }
 

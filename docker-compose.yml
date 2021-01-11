@@ -1,15 +1,17 @@
-version: '3.8'
+version: '3.9'
 
 services:
   app:
-    image: webdevops/php-apache
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
       - .:/app
-    ports: 
+    ports:
       - 80:80
   mongo:
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+    image: mongo:latest
+    volumes:
+      - /home/eduar/mongodata:/data/db
+    ports:
+      - 27017:27017

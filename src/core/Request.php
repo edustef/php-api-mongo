@@ -18,13 +18,7 @@ class Request
 
   public function method(): string
   {
-    $method = $_SERVER['REQUEST_METHOD'];
-
-    if ($method === self::POST && isset($this->body['_method'])) {
-      $method = strtoupper($this->body['_method']);
-    }
-
-    return $method;
+    return $_SERVER['REQUEST_METHOD'];
   }
 
   public function isGet(): bool
@@ -50,6 +44,12 @@ class Request
   public function getPath(): string
   {
     $path = $_SERVER['REQUEST_URI'] ?? '/';
+
+    // Removes the last slash in the url
+    if (strlen($path) > 1 && substr($path, -1) == '/') {
+      $path = substr($path, 0, strlen($path) - 1);
+    }
+
     $position = strpos($path, '?');
 
 
@@ -63,15 +63,20 @@ class Request
   public function setBody()
   {
     $body = [];
-    $method = $_SERVER['REQUEST_METHOD'];
-    if ($method === self::GET) {
+    if ($this->isGet()) {
       foreach (array_keys($_GET) as $key) {
         $body[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_STRING);
       }
       // $body = filter_input_array(INPUT_GET, FILTER_SANITIZE_STRING);
-    } else { // is post
+    } else if ($this->isPost()) { // is post
       foreach (array_keys($_POST) as $key) {
         $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
+      }
+    } else {
+      $data = null;
+      parse_str(file_get_contents("php://input"), $data);
+      foreach ($data as $key => $value) {
+        $body[$key] = filter_var($value, FILTER_SANITIZE_STRING);
       }
     }
 
