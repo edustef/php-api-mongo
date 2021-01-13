@@ -66,20 +66,6 @@ abstract class Model
         if ($ruleName === self::RULE_MATCH && $value !== $this->{$rule['match']}) {
           $this->addError($attribute, self::RULE_MATCH, ['match' => $this->getLabel($rule['match'])]);
         }
-
-        if ($ruleName === self::RULE_UNIQUE) {
-          $tableName = $rule['tableName'];
-          $uniqueAttribute = $rule['attribute'] ?? $attribute;
-
-          $query = 'SELECT * FROM ' . $tableName . ' WHERE ' . $uniqueAttribute . ' = :attribute';
-          $stmnt = Application::$app->database->pdo->prepare($query);
-          $stmnt->bindValue(':attribute', $value);
-          $stmnt->execute();
-          $record = $stmnt->fetchObject();
-          if ($record) {
-            $this->addError($attribute, self::RULE_UNIQUE, ['unique' => $this->getLabel($attribute)]);
-          }
-        }
       }
     }
 

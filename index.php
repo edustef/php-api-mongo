@@ -22,13 +22,13 @@ $config = [
   'db' => [
     'dbname' => $_ENV['DB_NAME'],
     'username' => $_ENV['DB_USER'],
-    'password' => $_ENV['DB_PASSWORD']
+    'password' => $_ENV['DB_PASSWORD'],
+    'db_local' => $_ENV['DB_LOCAL'] === 'true' ? true : false
   ],
 ];
 
 $app = new Application($config);
 
-$app->router->get('/tests', [TestController::class, 'getTests']);
-$app->router->get('/tests/:id', [TestController::class, 'getTests']);
+$app->router->get('/tests', [TestController::class, 'resolve']);
 
 $app->run();

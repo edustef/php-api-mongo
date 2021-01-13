@@ -9,7 +9,7 @@ services:
       - .:/app
     ports:
       - 80:80
-  mongo:
+  db:
     image: mongo:latest
     volumes:
       - /home/eduar/mongodata:/data/db

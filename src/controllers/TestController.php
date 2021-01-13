@@ -9,17 +9,23 @@ use api\models\Prestamo;
 use edustef\mvcFrame\Application;
 use edustef\mvcFrame\exceptions\NotFoundException;
 
-class TestController extends Controller
-{
+class TestController extends Controller {
+
+  public function resolve(Request $request, Response $response) {
+    $path = explode('/', $request->getPath());
+    $resource = array_shift($path);
+
+    return $response->json(['name' => 'resolver']);
+  }
 
   public function getTests(Request $request, Response $response)
   {
     $results = [];
-    $db = Application::$app->database;
+    $db = Application::$app->getDB();
 
     $cursor = $db->test->find();
 
-    foreach ($cursor as $test) {
+    foreach($cursor as $test) {
       $results[] = $test;
     }
 

@@ -54,17 +54,6 @@ class Router
     $path = $this->request->getPath();
     $method = $this->request->method();
 
-    $storedPaths = $this->routes[$method];
-    foreach ($storedPaths as $storedPath => $cb) {
-      $storedPathSplit = explode('/', $storedPath);
-      $pathSplit = explode('/', $path);
-
-      for ($i = 0; $i < count($pathSplit) - 1; $i++) {
-        if ($pathSplit[$i] === $storedPathSplit[$i] || strpos(':', $storedPathSplit[$i]) !== false) {
-          $storedPath
-        }
-      }
-    }
     $callback = $this->routes[$method][$path] ?? false;
     $params = [];
 
@@ -78,10 +67,6 @@ class Router
       Application::$app->controller = $controller;
       $controller->action = $callback[1];
       $callback[0] = $controller;
-
-      foreach ($controller->middlewares as $middleware) {
-        $middleware[0]->execute($middleware[1]);
-      }
     }
 
     return call_user_func($callback, $this->request, $this->response, $params);
